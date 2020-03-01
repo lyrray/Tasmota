@@ -159,15 +159,25 @@ bool SonoffD1SerialInput(void)
 
 /********************************************************************************************/
 
+bool SonoffD1ModuleSelected(void)
+{
+  SetSerial(9600, TS_SERIAL_8N1);
+
+  devices_present++;
+  light_type = LT_SERIAL1;
+
+  return true;
+}
+
 bool SonoffD1SendPower(void)
 {
   uint8_t buffer[17] = { 0xAA,0x55,0x01,0x04,0x00,0x0A,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00 };
 
-  buffer[6] = XdrvMailbox.payload;
+  buffer[6] = XdrvMailbox.index;
 
   for (uint32_t i = 0; i < sizeof(buffer); i++) {
-    if ((i > 1) && (i < sizeof(buffer) -1)) { serial_in_buffer[16] += serial_in_buffer[i]; }
-    Serial.write(serial_in_buffer[i]);
+    if ((i > 1) && (i < sizeof(buffer) -1)) { buffer[16] += buffer[i]; }
+    Serial.write(buffer[i]);
   }
   return true;
 }
@@ -176,11 +186,11 @@ bool SonoffD1SendDimmer(void)
 {
   uint8_t buffer[17] = { 0xAA,0x55,0x01,0x04,0x00,0x0A,0xFF,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00 };
 
-  buffer[7] = light_state.getDimmer();
+  buffer[7] = changeUIntScale(((uint16_t *)XdrvMailbox.data)[0], 0, 255, 0, 100);
 
   for (uint32_t i = 0; i < sizeof(buffer); i++) {
-    if ((i > 1) && (i < sizeof(buffer) -1)) { serial_in_buffer[16] += serial_in_buffer[i]; }
-    Serial.write(serial_in_buffer[i]);
+    if ((i > 1) && (i < sizeof(buffer) -1)) { buffer[16] += buffer[i]; }
+    Serial.write(buffer[i]);
   }
   return true;
 }
@@ -205,7 +215,7 @@ bool Xdrv39(uint8_t function)
         result = SonoffD1SendDimmer();
         break;
       case FUNC_MODULE_INIT:
-        SetSerial(9600, TS_SERIAL_8N1);
+        result = SonoffD1ModuleSelected();
         break;
     }
   }
