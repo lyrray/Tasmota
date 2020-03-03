@@ -498,7 +498,7 @@ void GetFeatures(void)
 #endif
 
 #ifdef USE_SONOFF_D1
-  feature6 |= 0x00800000; // xdrv_37_sonoff_d1.ino
+  feature5 |= 0x00800000; // xdrv_37_sonoff_d1.ino
 #endif
 
 //  feature5 |= 0x01000000;

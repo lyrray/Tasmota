@@ -191,7 +191,7 @@ bool SonoffD1SendDimmer(void)
 
 bool SonoffD1ModuleSelected(void)
 {
-  SetSerial(9600, TS_SERIAL_8N1);
+  SetSerialBaudrate(9600);
 
   devices_present++;
   light_type = LT_SERIAL1;
