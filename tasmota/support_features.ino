@@ -496,7 +496,6 @@ void GetFeatures(void)
 #ifdef USE_GPS
   feature5 |= 0x00400000;
 #endif
-
 #ifdef USE_SONOFF_D1
   feature5 |= 0x00800000; // xdrv_37_sonoff_d1.ino
 #endif

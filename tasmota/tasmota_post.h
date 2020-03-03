@@ -460,7 +460,7 @@ extern "C" void custom_crash_callback(struct rst_info * rst_info, uint32_t stack
 #undef USE_PWM_DIMMER                            // Disable support for MJ-SD01/acenx/NTONPOWER PWM dimmers (+4k5 code)
 #undef USE_PWM_DIMMER_REMOTE                     // Disbale support for remote switches to PWM Dimmer
 #undef USE_KEELOQ                                // Disable support for Jarolift rollers by Keeloq algorithm (+4k5 code)
-//#undef USE_SONOFF_D1                             // Disable support for Sonoff D1 Dimmer (+0k7 code)
+#undef USE_SONOFF_D1                             // Disable support for Sonoff D1 Dimmer (+0k7 code)
 
 // -- Optional light modules ----------------------
 //#undef USE_LIGHT                                 // Also disable all Dimmer/Light support

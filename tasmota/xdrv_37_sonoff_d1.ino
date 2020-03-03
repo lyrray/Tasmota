@@ -171,6 +171,7 @@ void SonoffD1Send(uint8_t lpower, uint8_t dimmer)
     if ((i > 1) && (i < sizeof(buffer) -1)) { buffer[16] += buffer[i]; }
     Serial.write(buffer[i]);
   }
+  Serial.flush();
 }
 
 bool SonoffD1SendPower(void)
@@ -181,17 +182,17 @@ bool SonoffD1SendPower(void)
 
 bool SonoffD1SendDimmer(void)
 {
-  uint8_t dimmer = changeUIntScale(((uint16_t *)XdrvMailbox.data)[0], 0, 255, 0, 100);
-  dimmer = (dimmer < Settings.dimmer_hw_min) ? Settings.dimmer_hw_min : dimmer;
-  dimmer = (dimmer > Settings.dimmer_hw_max) ? Settings.dimmer_hw_max : dimmer;
-
+  uint8_t dimmer = changeUIntScale(XdrvMailbox.data[0], 0, 255, Settings.dimmer_hw_min, Settings.dimmer_hw_max);
+  
   SonoffD1Send(0xFF, dimmer);
   return true;
 }
 
 bool SonoffD1ModuleSelected(void)
 {
-  SetSerialBaudrate(9600);
+  Settings.flag.mqtt_serial = 0;  // CMND_SERIALSEND and CMND_SERIALLOG
+  baudrate = 9600;
+  SetSeriallog(LOG_LEVEL_NONE);
 
   devices_present++;
   light_type = LT_SERIAL1;
